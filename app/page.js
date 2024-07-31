@@ -1,95 +1,179 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-
+"use client"
+import { Box, Modal, Stack, TextField, Typography, Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { query, collection, getDocs, setDoc, deleteDoc, doc, getDoc } from "firebase/firestore";
+import { firestore } from "@/firebase";
+const item = ['tomato', 'onion', 'cucumber', 'kale', 'banana', 'apple', 'cucumber', 'kale', 'banana', 'apple']
 export default function Home() {
+
+  const [pantry, setPantry] = useState([])
+  const [open, setOpen] = useState(false)
+  const [itemName, setItemName] = useState('')
+
+  const updateInventory = async () => {
+    const snapshot = query(collection(firestore,
+      'pantry'))
+    const docs = await getDocs(snapshot)
+    const inventoryList = []
+    docs.forEach((doc) => {
+      inventoryList.push({
+        name: doc.id,
+        ...doc.data(),
+      })
+    })
+    setPantry(inventoryList)
+    console.log(pantry)
+  }
+
+  const removeItem = async (item) => {
+    const docRef = doc(collection(firestore, 'pantry'), item)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      const { quantity } = docSnap.data()
+      if (quantity === 1) {
+        await deleteDoc(docRef)
+      } else {
+        await setDoc(docRef, { quantity: quantity - 1 })
+      }
+    }
+    await updateInventory()
+  }
+
+  const addItem = async (item) => {
+    const docRef = doc(collection(firestore, 'pantry'), item)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      const { quantity } = docSnap.data()
+
+      await setDoc(docRef, { quantity: quantity + 1 })
+    } else {
+      await setDoc(docRef, { quantity: 1 })
+
+    }
+    await updateInventory()
+  }
+
+  useEffect(() => {
+    updateInventory()
+  }, [])
+
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box
+      width="100vw"
+      height="100vh"
+      display={'flex'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      flexDirection={'column'}
+      bgcolor={'#ffffff'}
+      gap={2}
+    >
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+
+          width={400}
+          bgcolor="white"
+          border="2px solid #000"
+          boxShadow={24}
+          p={4}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+          sx={{
+            transform: "translate(-50%, -50%)"
+          }}
+        >
+          <Typography variant="h6" color={"black"}>Add Item</Typography>
+          <Stack width="100%" direction="row" spacing={2}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            <TextField
+              variant="outlined"
+              fullWidth
+              value={itemName}
+              onChange={(e) => {
+                setItemName(e.target.value)
+              }}
+            >
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+            </TextField>
+            <Button variant="outlined" onClick={() => {
+              addItem(itemName)
+              setItemName('')
+              handleClose()
+            }}>Add</Button>
+          </Stack>
+        </Box>
+      </Modal>
+      <Button variant="contained" onClick={() => {
+        handleOpen()
+      }}>ADD NEW ITEM</Button>
+      <Box
+        border={'1px solid #333'}
+      >
+        <Box
+          width="800px"
+          height="100px"
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          bgcolor={'#ADD8E5'}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <Typography
+            variant={'h2'}
+            color={'#333'}
+            textAlign={'center'}>
+            Pantry Items
+          </Typography>
+        </Box>
+        <Stack width="800px" height="300px" spacing={2} overflow={'auto'}>
+          {
+            pantry.map(({ name, quantity }) => (
+              <Box
+                key={name}
+                width="100%"
+                minHeight="150px"
+                display={'flex'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                bgcolor={'#f0f0f0'}
+              >
+                <Typography
+                  variant={'h2'}
+                  color={'#333'}
+                  textAlign={'center'}>
+                  {
+                    name.charAt(0).toUpperCase() + name.slice(1)
+                  }
+                </Typography>
+                <Typography
+                  variant={'h2'}
+                  color={'#333'}
+                  textAlign={'center'}>
+                  {
+                    quantity
+                  }
+                </Typography>
+                <Stack direction={"row"} gap={2}>
+                  <Button variant="contained" onClick={() => {
+                    addItem(name)
+                  }}>Add</Button>
+                  <Button variant="contained" onClick={() => {
+                    removeItem(name)
+                  }}>Remove</Button>
+                </Stack>
+              </Box>
+            ))
+          }
+        </Stack>
+      </Box>
+    </Box >
   );
+
 }
