@@ -3,7 +3,7 @@ import { Box, Modal, Stack, TextField, Typography, Button } from "@mui/material"
 import { useEffect, useState } from "react";
 import { query, collection, getDocs, setDoc, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { firestore } from "@/firebase";
-const item = ['tomato', 'onion', 'cucumber', 'kale', 'banana', 'apple', 'cucumber', 'kale', 'banana', 'apple']
+
 export default function Home() {
 
   const [pantry, setPantry] = useState([])
