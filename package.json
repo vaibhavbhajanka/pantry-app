@@ -11,8 +11,11 @@
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
+    "@google-cloud/vision": "^4.3.0",
     "@mui/material": "^5.16.5",
-    "firebase": "^10.12.4",
+    "firebase": "^10.12.5",
+    "firebase-admin": "^12.3.0",
+    "firebaseui": "^6.1.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18"
