@@ -26,7 +26,7 @@ const LoginPage = () => {
       >
         <img
           src="/signup.png"
-          alt="Meditation"
+          alt="Signup"
           style={{ maxWidth: "100%" }}
         />
       </Box>
