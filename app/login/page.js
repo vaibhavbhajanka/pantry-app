@@ -1,14 +1,27 @@
 "use client";
-import React from "react";
+import React, {useEffect} from "react";
 import { Box, Typography } from "@mui/material";
-import FirebaseAuth from "../auth";
 import { Roboto_Slab, Lora } from "next/font/google";
-
+import dynamic from "next/dynamic"; 
+// Import FirebaseAuth dynamically to ensure it's only loaded in the browser
+const FirebaseAuth = dynamic(() => import("../auth"), {
+    ssr: false, // This ensures the component is only rendered on the client side
+  });
+  
 // Load the fonts
 const robotoSlab = Roboto_Slab({ subsets: ["latin"], weight: ["400", "700"] });
 const lora = Lora({ subsets: ["latin"], weight: ["400", "700"] });
 
 const LoginPage = () => {
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+          // Code that needs window
+          console.log("Window is available");
+        }
+      }, []);
+
+
   return (
     <Box display="flex" minHeight="100vh"
     overflow="hidden" 
