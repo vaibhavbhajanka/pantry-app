@@ -1,39 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ThePantryApp
 
-## Getting Started
+A smart pantry management application that helps you keep track of your kitchen inventory and discover new recipes with what you already have.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Ever opened your pantry and wondered what you can make with those random ingredients? This app solves that problem. It's a simple yet powerful tool that lets you:
+
+- **Track your pantry items** - Add, remove, and monitor quantities of everything in your kitchen
+- **Snap photos to add items** - Point your camera at food items and let AI identify them for you
+- **Generate recipes** - Get personalized recipe suggestions based on your current pantry inventory
+- **Search your inventory** - Quickly find what you're looking for in your pantry
+
+## Key Features
+
+### Smart Inventory Management
+Keep track of everything in your pantry with a clean, intuitive interface. Add items manually or use the camera feature to automatically identify ingredients.
+
+### AI-Powered Image Recognition
+Simply take a photo of any food item, and the app will identify it for you using OpenAI's vision capabilities. No more typing out ingredient names!
+
+### Recipe Generation
+Stuck on what to cook? Hit the "Generate Recipe" button and get step-by-step cooking instructions using only the ingredients you have on hand.
+
+### User Authentication
+Secure Firebase authentication ensures your pantry data stays private and synced across your devices.
+
+## Tech Stack
+
+- **Frontend**: Next.js 14, React, Material-UI
+- **Backend**: Firebase (Firestore, Authentication)
+- **AI Integration**: OpenAI GPT-4o-mini for image recognition and recipe generation
+- **Camera**: React Camera Pro for capturing images
+
+## Project Structure
+
 ```
+pantry/
+├── app/
+│   ├── components/
+│   │   └── imageUploader.js    # Camera component for item recognition
+│   ├── login/
+│   │   └── page.js             # Authentication page
+│   ├── utils/
+│   │   └── imageUtils.js       # Image processing utilities
+│   ├── page.js                 # Main pantry interface
+│   └── auth.js                 # Firebase authentication logic
+├── pages/api/
+│   ├── classify-image.js       # OpenAI image classification endpoint
+│   └── generate-recipe.js      # OpenAI recipe generation endpoint
+└── firebase.js                 # Firebase configuration
+```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# pantry-app
-# pantry-app
-# pantry-app
+Built using modern web technologies and AI to make kitchen management a breeze.
